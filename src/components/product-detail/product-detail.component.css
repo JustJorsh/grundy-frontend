@@ -1,0 +1,63 @@
+:root {
+  --card-radius: 12px;
+  --accent: #06b6d4;
+  --accent-2: #0ea5a4;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+.product-detail {
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.back {
+  background: transparent;
+  border: none;
+  color: #0b1720;
+  font-weight: 600;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  background: #fff;
+  border-radius: var(--card-radius);
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(8, 15, 30, 0.06);
+  border: 1px solid rgba(15,23,42,0.04);
+}
+
+.media {
+  height: 420px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  background-color: #eef2ff;
+}
+
+.info { display: flex; flex-direction: column; gap: 12px; }
+
+.name { margin: 0; font-size: 1.5rem; font-weight: 700; }
+
+.price { font-size: 1.25rem; color: var(--accent-2); font-weight: 800; }
+
+.meta { color: #64748b; font-size: 0.95rem; display:flex; gap:8px; align-items:center; }
+
+.description { color: #334155; line-height: 1.4; }
+
+.merchant { color: #0b1720; font-size: 0.95rem; }
+
+.actions { margin-top: 8px; display:flex; gap:8px; }
+
+.btn { padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; border: none; }
+.btn-add { background: linear-gradient(90deg,var(--accent),var(--accent-2)); color: #06121a; flex: 1; }
+.btn-ghost { background: transparent; border: 1px solid rgba(6,182,212,0.12); color:#06121a; }
+
+@media (max-width: 800px) {
+  .card { grid-template-columns: 1fr; }
+  .media { height: 280px; }
+}

@@ -1,0 +1,64 @@
+<div class="container">
+  <h1>Track Your Order</h1>
+  
+  <div class="track-order-form">
+    <input type="text" [(ngModel)]="trackOrderId" placeholder="Enter Order ID">
+    <button (click)="trackOrder()" [disabled]="isLoading" class="btn btn-primary">
+      {{ isLoading ? 'Tracking...' : 'Track' }}
+    </button>
+  </div>
+
+  <div class="order-details" *ngIf="trackedOrder">
+    <header class="order-header">
+      <h2>Order #{{ trackedOrder.orderId }}</h2>
+      <time class="order-date">{{ trackedOrder.createdAt | date:'medium' }}</time>
+    </header>
+    
+    <div class="order-status">
+      <h3>Status: {{ trackedOrder.status | uppercase }}</h3>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width]="getProgressWidth(trackedOrder.status)"></div>
+      </div>
+    </div>
+
+    <div class="order-grid">
+      <div class="info-section customer-info">
+        <h4>Customer Information</h4>
+        <p><strong>Name:</strong> {{ trackedOrder.customerId.name }}</p>
+        <p><strong>Email:</strong> {{ trackedOrder.customerId.email }}</p>
+        <p><strong>Phone:</strong> {{ trackedOrder.customerId.phone }}</p>
+      </div>
+
+      <div class="info-section merchant-info">
+        <h4>Merchant Information</h4>
+        <p><strong>Business:</strong> {{ trackedOrder.merchantId.businessName }}</p>
+        <p><strong>Type:</strong> {{ trackedOrder.merchantId.type | titlecase }}</p>
+      </div>
+
+      <div class="info-section payment-info">
+        <h4>Payment Details</h4>
+        <p><strong>Method:</strong> {{ trackedOrder.payment.method | titlecase }}</p>
+        <p><strong>Status:</strong> {{ trackedOrder.payment.status | titlecase }}</p>
+        <p><strong>Amount:</strong> {{ formatCurrency(trackedOrder.payment.amount) }}</p>
+        <p><strong>Platform Fee:</strong> {{ formatCurrency(trackedOrder.payment.platformFee) }}</p>
+        <p class="reference"><strong>Reference:</strong> {{ trackedOrder.payment.paystackReference }}</p>
+      </div>
+
+      <div class="info-section delivery-info">
+        <h4>Delivery Information</h4>
+        <p><strong>Status:</strong> {{ trackedOrder.delivery.status | titlecase }}</p>
+        <p><strong>Expected by:</strong> {{ trackedOrder.delivery.estimatedDelivery | date:'medium' }}</p>
+      </div>
+
+      <div class="info-section order-items">
+        <h4>Order Items</h4>
+        <div class="items-list">
+          <div class="order-item" *ngFor="let item of trackedOrder.items">
+            <span>Product #{{ item.productId }}</span>
+            <span class="quantity">x{{ item.quantity }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

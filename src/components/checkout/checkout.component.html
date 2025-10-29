@@ -1,0 +1,94 @@
+<div class="checkout-page">
+  <div class="checkout-grid">
+    <section class="panel panel-form">
+      <div class="panel-header">
+        <h1>Checkout</h1>
+        <p class="subtitle">Review your order and complete payment</p>
+      </div>
+
+      <form class="customer-form" (ngSubmit)="placeOrder()">
+        <fieldset>
+          <legend>Customer information</legend>
+          <br>
+
+          <label class="field">
+            <input type="text" [(ngModel)]="customer.name" name="name" required />
+            <span class="label-text">Full name</span>
+          </label>
+
+          <label class="field">
+            <input type="email" [(ngModel)]="customer.email" name="email" required />
+            <span class="label-text">Email</span>
+          </label>
+
+          <label class="field">
+            <input type="tel" [(ngModel)]="customer.phone" name="phone" required />
+            <span class="label-text">Phone number</span>
+          </label>
+
+          <label class="field textarea">
+            <textarea [(ngModel)]="customer.address" name="address" rows="3" required></textarea>
+            <span class="label-text">Delivery address</span>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment method</legend>
+          <div class="payment-list">
+            <label class="payment-item" *ngFor="let method of paymentMethods">
+              <input type="radio"
+                     [(ngModel)]="selectedPaymentMethod"
+                     [value]="method.id"
+                     name="paymentMethod" />
+              <div class="method">
+                <div class="method-title">{{ method.name }}</div>
+                <div class="method-desc">{{ method.description }}</div>
+              </div>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="actions-mobile">
+          <button type="submit" class="btn btn-primary btn-large" [disabled]="isProcessing">
+            {{ isProcessing ? 'Processing…' : 'Place order' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="panel panel-summary">
+      <div class="summary-header">
+        <h2>Order summary</h2>
+        <div class="items-count">{{ cart.length }} item{{ cart.length !== 1 ? 's' : '' }}</div>
+      </div>
+
+      <div class="order-items">
+        <div class="order-item" *ngFor="let item of cart">
+          <div class="item-name">{{ item.name }} <small class="x">x{{ item.quantity }}</small></div>
+          <div class="item-price">{{ formatCurrency(item.price * item.quantity) }}</div>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <div class="total-label">Total</div>
+        <div class="total-amount">{{ formatCurrency(getCartTotal()) }}</div>
+      </div>
+
+      <div class="summary-actions">
+        <button (click)="placeOrder()" class="btn btn-ghost" [disabled]="isProcessing">
+          {{ isProcessing ? 'Processing…' : 'Place order' }}
+        </button>
+        <button class="btn btn-ghost" (click)="goToMarketplace()">Continue shopping</button>
+      </div>
+
+      <div class="virtual-account" *ngIf="virtualAccount">
+        <h4>Virtual account</h4>
+        <div class="va-row"><strong>Account:</strong> {{ virtualAccount.accountNumber }}</div>
+        <div class="va-row"><strong>Bank:</strong> {{ virtualAccount.bankName }}</div>
+        <div class="va-row"><strong>Name:</strong> {{ virtualAccount.accountName }}</div>
+        <div class="va-row"><strong>Amount:</strong> {{ formatCurrency(order.totalAmount) }}</div>
+        <p class="va-instruction">Transfer exactly <strong>{{ formatCurrency(order.totalAmount) }}</strong> to complete payment.</p>
+      </div>
+    </aside>
+  </div>
+</div>

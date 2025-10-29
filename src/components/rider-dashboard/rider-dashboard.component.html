@@ -1,0 +1,72 @@
+<div class="container">
+  <h1>Rider Dashboard</h1>
+
+  <div class="rider-stats">
+    <div class="stat-card">
+      <h3>Total Deliveries</h3>
+      <p>{{ riderStats.totalDeliveries }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Today's Deliveries</h3>
+      <p>{{ riderStats.todayDeliveries }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Total Earnings</h3>
+      <p>{{ formatCurrency(riderStats.totalEarnings) }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Rating</h3>
+      <p>{{ riderStats.rating }} ⭐</p>
+    </div>
+  </div>
+
+  <div class="dashboard-sections">
+    <!-- Available Orders -->
+    <div class="section">
+      <h2>Available Orders</h2>
+      <div class="orders-list">
+        <div class="order-card" *ngFor="let order of availableOrders">
+          <h4>Order #{{ order.orderId }}</h4>
+          <p><strong>Customer:</strong> {{ order.customer.email }}</p>
+          <p><strong>Amount:</strong> {{ formatCurrency(order.totalAmount) }}</p>
+          <p><strong>Delivery:</strong> {{ order.customer.address }}</p>
+          <button (click)="acceptOrder(order.orderId)" class="btn btn-primary">Accept Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Order -->
+    <div class="section" *ngIf="currentOrder">
+      <h2>Current Delivery</h2>
+      <div class="current-order">
+        <h3>Order #{{ currentOrder.orderId }}</h3>
+        <p><strong>Customer:</strong> {{ currentOrder.customer.name || currentOrder.customer.email }}</p>
+        <p><strong>Address:</strong> {{ currentOrder.customer.address }}</p>
+        <p><strong>Amount:</strong> {{ formatCurrency(currentOrder.totalAmount) }}</p>
+        <p><strong>Payment:</strong> {{ currentOrder.payment.method }}</p>
+
+        <div class="delivery-actions">
+          <button (click)="updateOrderStatus('picked_up')" class="btn btn-primary">Mark as Picked Up</button>
+          <button (click)="updateOrderStatus('in_transit')" class="btn btn-secondary">Start Delivery</button>
+          <button (click)="updateOrderStatus('delivered')" class="btn btn-success">Mark as Delivered</button>
+        </div>
+
+        <!-- Terminal Payment -->
+        <div class="terminal-payment" *ngIf="currentOrder.payment.method === 'terminal_delivery'">
+          <h4>Terminal Payment</h4>
+          <p>Collect payment via terminal when delivered</p>
+          <button (click)="processTerminalPayment(currentOrder.payment.terminalSessionId)" 
+                  class="btn btn-primary">Process Terminal Payment</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location Tracking -->
+    <div class="section">
+      <h2>Location Tracking</h2>
+      <p>Your location is being tracked for optimal delivery routing</p>
+      <p><strong>Lat:</strong> {{ location.lat | number:'1.2-6' }}, <strong>Lng:</strong> {{ location.lng | number:'1.2-6' }}</p>
+      <button (click)="updateLocation()" class="btn btn-secondary">Update Location</button>
+    </div>
+  </div>
+</div>

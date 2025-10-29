@@ -1,0 +1,64 @@
+<div class="marketplace">
+  <header class="mp-header">
+    <h1 class="title">Marketplace</h1>
+
+    <button class="cart-summary" (click)="proceedToCheckout()" title="Go to checkout">
+      <span class="cart-count" aria-hidden="true">{{ getCartItemCount() }}</span>
+      <span class="cart-total">{{ formatCurrency(getCartTotal()) }}</span>
+    </button>
+  </header>
+
+  <section *ngIf="loading" class="loading-grid" aria-busy="true">
+    <div class="skeleton-card" *ngFor="let n of [1,2,3,4,5,6]">
+      <div class="skeleton media"></div>
+      <div class="skeleton line short"></div>
+      <div class="skeleton line"></div>
+      <div class="skeleton line tiny"></div>
+      <div class="skeleton action"></div>
+    </div>
+  </section>
+
+  <section *ngIf="error && !loading" class="state state-error" role="alert">
+    <p>Failed to load products.</p>
+    <div class="controls">
+      <button class="btn" (click)="fetchProducts()">Retry</button>
+    </div>
+  </section>
+
+  <section *ngIf="!loading && !error && products.length === 0" class="state state-empty">
+    <p>No products available right now.</p>
+  </section>
+
+  <section *ngIf="!loading && !error && products.length > 0" class="grid">
+    <article class="card" *ngFor="let p of products">
+      <div class="media" [style.background-image]="'url(' + (p.image || '../assets/placeholder.jpg') + ')'"></div>
+
+      <div class="card-body">
+        <div class="card-top">
+          <h2 class="name">{{ p.name }}</h2>
+          <div class="price">{{ formatCurrency(p.price) }}</div>
+        </div>
+
+        <p class="meta">
+          {{ p.category }}
+          <span class="dot">•</span>
+          <!-- <span class="id">#{{ p._id }}</span> -->
+          <!-- <span *ngIf="p.unit" class="dot">•</span> -->
+          <small *ngIf="p.unit" class="muted"> {{ p.unit }}</small>
+        </p>
+
+        <p class="description" *ngIf="p.description">{{ p.description }}</p>
+
+        <div class="card-actions">
+          <button class="btn btn-add" (click)="addToCart(p)">Add to cart</button>
+          <button 
+            class="btn btn-ghost" 
+            (click)="viewProduct(p._id || '')" 
+            [disabled]="!p._id">
+            View
+          </button>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>

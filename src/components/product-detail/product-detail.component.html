@@ -1,0 +1,38 @@
+<div class="product-detail">
+  <button class="back" (click)="goBack()">← Back</button>
+
+  <div *ngIf="loading" class="loading">Loading product…</div>
+
+  <div *ngIf="error && !loading" class="state state-error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && product" class="card">
+    <div class="media" [style.background-image]="'url(' + (product.image || '/assets/placeholder.png') + ')'"></div>
+
+    <div class="info">
+      <h1 class="name">{{ product.name }}</h1>
+      <div class="price">{{ formatCurrency(product.price) }}</div>
+      <div class="meta">
+        <span class="category">{{ product.category }}</span>
+        <span *ngIf="product.unit" class="dot">•</span>
+        <span *ngIf="product.unit" class="unit">{{ product.unit }}</span>
+        <span class="dot">•</span>
+        <span class="stock" [class.out]="!product.available">
+          {{ product.available ? ('In stock: ' + (product.stock ?? '—')) : 'Unavailable' }}
+        </span>
+      </div>
+
+      <p class="description" *ngIf="product.description">{{ product.description }}</p>
+
+      <div class="merchant" *ngIf="product.merchant">
+        Sold by <strong>{{ product.merchant.businessName || product.merchant.id }}</strong>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-add" (click)="addToCart()" [disabled]="!product.available">Add to cart</button>
+        <button class="btn btn-ghost" (click)="goBack()">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>

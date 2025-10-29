@@ -1,0 +1,159 @@
+<div class="container">
+  <h1 class="dashboard-title">Merchant Dashboard</h1>
+
+  <div *ngIf="!isLoggedIn" class="login-section">
+    <h2>Merchant Login</h2>
+    <form class="login-form" (ngSubmit)="loginMerchant()" #loginForm="ngForm">
+      <div class="form-group">
+        <input 
+          type="email" 
+          [(ngModel)]="merchant.email" 
+          name="email"
+          #email="ngModel"
+          placeholder="Email" 
+          required>
+      </div>
+      <div class="form-group">
+        <input 
+          type="password" 
+          [(ngModel)]="merchant.password" 
+          name="password"
+          #password="ngModel"
+          placeholder="Password" 
+          required>
+      </div>
+      <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">
+        Login
+      </button>
+    </form>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  </div>
+
+  <div *ngIf="isLoggedIn">
+    <div class="dashboard-tabs">
+      <button class="tab-btn" 
+              [class.active]="currentTab === 'register'"
+              (click)="currentTab = 'register'">Register</button>
+      <button class="tab-btn"
+              [class.active]="currentTab === 'products'"
+              (click)="currentTab = 'products'">Products</button>
+      <button class="tab-btn"
+              [class.active]="currentTab === 'orders'"
+              (click)="currentTab = 'orders'">Orders</button>
+      <button class="tab-btn"
+              [class.active]="currentTab === 'analytics'"
+              (click)="currentTab = 'analytics'">Analytics</button>
+    </div>
+
+    <!-- Merchant Registration -->
+    <div class="tab-content" *ngIf="currentTab === 'register'">
+      <h2>Register as Merchant</h2>
+      <div class="merchant-form">
+        <div class="form-group">
+          <input type="text" [(ngModel)]="merchant.businessName" placeholder="Business Name" required>
+        </div>
+        <div class="form-group">
+          <input type="email" [(ngModel)]="merchant.email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="tel" [(ngModel)]="merchant.phone" placeholder="Phone" required>
+        </div>
+        <div class="form-group">
+          <textarea [(ngModel)]="merchant.address" placeholder="Business Address" required></textarea>
+        </div>
+        <div class="form-group">
+          <select [(ngModel)]="merchant.type">
+            <option value="open_air_market">Open Air Market</option>
+            <option value="grocery_shop">Grocery Shop</option>
+            <option value="supermarket">Supermarket</option>
+          </select>
+        </div>
+        <button (click)="registerMerchant()" class="btn btn-primary">Register</button>
+      </div>
+    </div>
+
+    <!-- Product Management -->
+    <div class="tab-content" *ngIf="currentTab === 'products'">
+      <h2>Product Management</h2>
+      
+      <div class="add-product-form">
+        <h3>Add New Product</h3>
+        <div class="form-group">
+          <input type="text" [(ngModel)]="newProduct.name" placeholder="Product Name">
+        </div>
+        <div class="form-group">
+          <input type="number" [(ngModel)]="newProduct.price" placeholder="Price">
+        </div>
+        <div class="form-group">
+          <input type="number" [(ngModel)]="newProduct.stock" placeholder="Stock Quantity">
+        </div>
+        <div class="form-group">
+          <select [(ngModel)]="newProduct.category">
+            <option value="Grains">Grains</option>
+            <option value="Vegetables">Vegetables</option>
+            <option value="Protein">Protein</option>
+            <option value="Fruits">Fruits</option>
+          </select>
+        </div>
+        <button (click)="addProduct()" class="btn btn-primary">Add Product</button>
+      </div>
+
+      <div class="products-list">
+        <h3>Your Products</h3>
+        <div class="products-grid">
+          <div class="product-card" *ngFor="let product of merchantProducts">
+            <div class="product-image" [style.background-image]="'url(' + (product.image || '/assets/placeholder.png') + ')'"></div>
+            <div class="product-details">
+              <h4>{{ product.name }}</h4>
+              <p class="price">{{ formatCurrency(product.price) }}</p>
+              <p class="stock" [class.low-stock]="product.stock && product.stock < 10">
+                Stock: {{ product.stock || 0 }}
+              </p>
+              <p class="category">{{ product.category }}</p>
+              <div class="product-status" [class.available]="product.available">
+                {{ product.available ? 'Available' : 'Unavailable' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Management -->
+    <div class="tab-content" *ngIf="currentTab === 'orders'">
+      <h2>Recent Orders</h2>
+      <div class="orders-list">
+        <div class="order-card" *ngFor="let order of orders">
+          <h4>Order #{{ order.orderId }}</h4>
+          <p><strong>Customer:</strong> {{ order.customer.email }}</p>
+          <p><strong>Amount:</strong> {{ formatCurrency(order.totalAmount) }}</p>
+          <p><strong>Status:</strong> {{ order.status }}</p>
+          <p><strong>Date:</strong> {{ order.createdAt | date }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="tab-content" *ngIf="currentTab === 'analytics'">
+      <h2>Business Analytics</h2>
+      <div class="analytics-grid">
+        <div class="stat-card">
+          <h3>Total Orders</h3>
+          <p>{{ analytics.totalOrders }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Completed Orders</h3>
+          <p>{{ analytics.completedOrders }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Total Revenue</h3>
+          <p>{{ formatCurrency(analytics.totalRevenue) }}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pending Orders</h3>
+          <p>{{ analytics.pendingOrders }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
