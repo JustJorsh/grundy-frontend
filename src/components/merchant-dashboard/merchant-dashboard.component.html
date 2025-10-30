@@ -25,52 +25,62 @@
       <button type="submit" class="btn btn-primary" [disabled]="!loginForm.form.valid">
         Login
       </button>
+       
     </form>
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+     <div class="register-section">
+      <p>Don't have an account?</p>
+      <button class="btn btn-secondary" (click)="showRegisterForm = true">
+        Register as Merchant
+      </button>
+    </div>
   </div>
 
+ 
+ <!-- Merchant Registration -->
+      <div *ngIf="showRegisterForm && !isLoggedIn" class="register-form">
+    <h2>Register as Merchant</h2>
+    <div class="merchant-form">
+      <div class="form-group">
+        <input type="text" [(ngModel)]="merchant.businessName" placeholder="Business Name" required>
+      </div>
+      <div class="form-group">
+        <input type="email" [(ngModel)]="merchant.email" placeholder="Email" required>
+      </div>
+      <div class="form-group">
+        <input type="tel" [(ngModel)]="merchant.phone" placeholder="Phone" required>
+      </div>
+      <div class="form-group">
+        <textarea [(ngModel)]="merchant.address" placeholder="Business Address" required></textarea>
+      </div>
+      <div class="form-group">
+        <select [(ngModel)]="merchant.type">
+           <option value="" disabled selected>Select Category</option>
+          <option value="open_air_market">Open Air Market</option>
+          <option value="grocery_shop">Grocery Shop</option>
+          <option value="supermarket">Supermarket</option>
+        </select>
+      </div>
+      <button (click)="registerMerchant()" class="btn btn-primary">Register</button>
+      <button class="btn btn-light" (click)="showRegisterForm = false">Back to Login</button>
+    </div>
+  </div>
   <div *ngIf="isLoggedIn">
     <div class="dashboard-tabs">
-      <button class="tab-btn" 
-              [class.active]="currentTab === 'register'"
-              (click)="currentTab = 'register'">Register</button>
+   
       <button class="tab-btn"
               [class.active]="currentTab === 'products'"
-              (click)="currentTab = 'products'">Products</button>
+              (click)="currentTab = 'products'; fetchMerchantProducts()">Products</button>
       <button class="tab-btn"
               [class.active]="currentTab === 'orders'"
-              (click)="currentTab = 'orders'">Orders</button>
+              (click)="currentTab = 'orders'; fetchOrders()">Orders</button>
       <button class="tab-btn"
               [class.active]="currentTab === 'analytics'"
-              (click)="currentTab = 'analytics'">Analytics</button>
+              (click)="currentTab = 'analytics'; fetchAnalytics()">Analytics</button>
     </div>
 
-    <!-- Merchant Registration -->
-    <div class="tab-content" *ngIf="currentTab === 'register'">
-      <h2>Register as Merchant</h2>
-      <div class="merchant-form">
-        <div class="form-group">
-          <input type="text" [(ngModel)]="merchant.businessName" placeholder="Business Name" required>
-        </div>
-        <div class="form-group">
-          <input type="email" [(ngModel)]="merchant.email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <input type="tel" [(ngModel)]="merchant.phone" placeholder="Phone" required>
-        </div>
-        <div class="form-group">
-          <textarea [(ngModel)]="merchant.address" placeholder="Business Address" required></textarea>
-        </div>
-        <div class="form-group">
-          <select [(ngModel)]="merchant.type">
-            <option value="open_air_market">Open Air Market</option>
-            <option value="grocery_shop">Grocery Shop</option>
-            <option value="supermarket">Supermarket</option>
-          </select>
-        </div>
-        <button (click)="registerMerchant()" class="btn btn-primary">Register</button>
-      </div>
-    </div>
+   
 
     <!-- Product Management -->
     <div class="tab-content" *ngIf="currentTab === 'products'">
@@ -125,9 +135,9 @@
       <div class="orders-list">
         <div class="order-card" *ngFor="let order of orders">
           <h4>Order #{{ order.orderId }}</h4>
-          <p><strong>Customer:</strong> {{ order.customer.email }}</p>
-          <p><strong>Amount:</strong> {{ formatCurrency(order.totalAmount) }}</p>
-          <p><strong>Status:</strong> {{ order.status }}</p>
+          <!-- <p><strong>Customer:</strong> {{ order.customer.email }}</p> -->
+          <p><strong>Amount:</strong> {{ formatCurrency(order.payment.amount) }}</p>
+          <p><strong>Status:</strong> {{ order.payment.status }}</p>
           <p><strong>Date:</strong> {{ order.createdAt | date }}</p>
         </div>
       </div>

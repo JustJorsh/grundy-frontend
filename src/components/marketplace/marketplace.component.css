@@ -1,10 +1,10 @@
 :root {
   --bg: #f7fbff;
-  --card: #fff;
+  --card: #0b1e55;
   --muted: #64748b;
   --accent: #06b6d4;
   --accent-2: #0ea5a4;
-  --glass: rgba(15, 23, 42, 0.04);
+  --glass: rgb(8, 8, 56);
   --radius: 12px;
   --shadow: 0 8px 28px rgba(15,23,42,0.08);
   --gap: 22px; /* increased gap between cards */
@@ -40,7 +40,7 @@
   align-items: center;
   gap: 10px;
   background: linear-gradient(90deg, rgba(6,182,212,0.12), rgba(14,165,164,0.08));
-  border: 1px solid var(--glass);
+  border: 1px solid rgb(9, 9, 63);
   padding: 8px 12px;
   border-radius: 999px;
   cursor: pointer;
@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: column;
   transition: transform .16s ease, box-shadow .16s ease;
-  border: 1px solid var(--glass);
+  border: 1px solid rgb(6, 6, 63);
   margin: 10px;
 
   /* increased card height so actions remain visible */
@@ -152,6 +152,7 @@
   color: rgb(21, 20, 20);
   /* make add button fill space for better visibility */
   flex: 1 1 auto;
+  border: 1px solid rgb(9, 64, 19);
 }
 
 .btn-ghost {
@@ -159,6 +160,7 @@
   border: 1px solid rgba(6,182,212,0.12);
   color: #0b2530;
   width: 80px;
+  border: 1px solid rgb(9, 9, 63);
 }
 
 /* States */

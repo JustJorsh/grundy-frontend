@@ -18,6 +18,11 @@ interface Customer {
 
 interface Order {
   orderId: string;
+  payment: {
+    amount: number;
+    method: string;
+    status: string;
+  };
   totalAmount: number;
   createdAt: string;
   customer: Customer; // Add customer property
@@ -39,6 +44,7 @@ interface Analytics {
 export class MerchantDashboardComponent {
   currentTab = 'register';
   isLoggedIn = false;
+  showRegisterForm = false;
   errorMessage: string | null = null;
   merchant: Merchant = {
     email: '',
@@ -70,15 +76,21 @@ export class MerchantDashboardComponent {
   constructor(private api: ApiService, private router: Router) {}
 
   async loginMerchant(): Promise<void> {
+    this.showRegisterForm = false;
     this.errorMessage = null;
     this.api.loginMerchant({ email: this.merchant.email, password: this.merchant.password }).subscribe({
       next: (res: any) => {
         if (res?.success) {
           this.isLoggedIn = true;
-          // backend may return token and merchant info
-          if (res.token) localStorage.setItem('token', res.token);
-          if (res.merchant?._id) {
-            this.merchantId = res.merchant._id;
+          this.showRegisterForm = false;
+          if (res.token) {
+        localStorage.setItem('authToken', res.token);
+        this.isLoggedIn = true;
+        this.fetchMerchantProducts();
+      }
+          if (res.merchant?.id) {
+            this.merchantId = res.merchant.id;
+            this.currentTab = 'products';
             this.fetchMerchantProducts(); // Fetch products after login
           }
         } else {
@@ -141,7 +153,16 @@ export class MerchantDashboardComponent {
     if (!this.isLoggedIn) return;
     this.api.getMerchantOrders().subscribe({
       next: (res: any) => {
-        this.orders = res?.orders || res?.data || [];
+        if (Array.isArray(res)) {
+        this.orders = res;
+      } else if (res?.orders && Array.isArray(res.orders)) {
+        this.orders = res.orders;
+      } else if (res?.data?.orders && Array.isArray(res.data.orders)) {
+        this.orders = res.data.orders;
+      } else {
+        this.orders = [];
+        console.warn('Unexpected orders response structure:', res);
+      }
       },
       error: () => { /* swallow for now */ }
     });
@@ -176,6 +197,6 @@ export class MerchantDashboardComponent {
   }
 
   formatCurrency(amount: number): string {
-    return `$${amount.toFixed(2)}`;
+    return `N${amount.toFixed(2)}`;
   }
 }

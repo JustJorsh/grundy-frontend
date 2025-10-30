@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Add this import
+import { CommonModule } from '@angular/common'; 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 import { AppComponent } from './app.component';
 import { MarketplaceComponent } from '../components/marketplace/marketplace.component';
@@ -41,7 +43,9 @@ const routes: Routes = [
     CommonModule, // Add this line
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+ providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

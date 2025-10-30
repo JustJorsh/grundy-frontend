@@ -1,10 +1,10 @@
 :root{
   --bg: #eef8ff;
-  --card: #ffffff;
+  --card: #4791dc;
   --muted: #6b7280;
   --accent: #0ea5a4;     /* primary bright accent */
   --accent-2: #047857;   /* deeper accent for contrast */
-  --card-border: rgba(4,120,87,0.08);
+  --card-border: rgba(4,120,87);
   --radius: 14px;
   --shadow: 0 18px 40px rgba(4,24,32,0.12);
   --max-width: 1120px;
@@ -34,10 +34,11 @@
   background: linear-gradient(180deg,var(--card), #f8fffb);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  border: 1px solid var(--card-border);
+  border: 1px solid rgb(13, 13, 101);
   padding: 20px;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  width:80%
 }
 
 /* left accent stripe to make cards stand out */
@@ -87,20 +88,20 @@ legend{ font-weight:700; margin-bottom:12px; color:#0b1720; padding-left: 12px; 
 
 .field{
   position: relative;
-  margin-bottom: 14px;
+  margin-bottom: 24px;
   display: block;
   padding-left: 12px;
 }
 
 .field input,
 .field textarea{
-  width: 100%;
+  width: 90%;
   padding: 12px 12px 12px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(15,23,42,0.06);
+  border: 1px solid rgba(15,23,42);
   background: rgba(246,251,255,0.98);
   font-size: 0.95rem;
-  outline: none;
+  outline: rgb(26, 26, 97);
   transition: box-shadow .12s ease, border-color .12s ease, transform .08s ease;
   resize: vertical;
 }
@@ -119,7 +120,7 @@ legend{ font-weight:700; margin-bottom:12px; color:#0b1720; padding-left: 12px; 
   position: absolute;
   top: 8px;
   left: 26px;
-  font-size: 0.82rem;
+  font-size: 5.02rem;
   color: var(--muted);
   pointer-events: none;
   transition: transform .12s ease, font-size .12s ease, top .12s ease;
@@ -155,13 +156,14 @@ legend{ font-weight:700; margin-bottom:12px; color:#0b1720; padding-left: 12px; 
   position:sticky;
   top:28px;
   height: fit-content;
-  padding-left: 16px; /* offset from accent */
+  margin: 20px;
+  padding-left: 10px; /* offset from accent */
 }
 
 /* make summary card slightly tinted to draw focus */
 .panel-summary{
   background: linear-gradient(180deg,#ffffff,#f7fffb);
-  border: 1px solid rgba(4,120,87,0.06);
+  border: 1px solid rgba(4,120,87);
   padding-bottom: 92px; /* room for sticky actions */
 }
 
@@ -209,11 +211,11 @@ legend{ font-weight:700; margin-bottom:12px; color:#0b1720; padding-left: 12px; 
 
 /* Order total */
 .order-total{ display:flex; justify-content:space-between; align-items:center; margin-top:14px; padding-top:14px; border-top:1px solid rgba(15,23,42,0.04); padding-left: 8px; }
-.total-label{ color:var(--muted); }
-.total-amount{ font-weight:800; font-size:1.18rem; color:var(--accent-2); }
+.total-label{ color:var(--muted); font-size:2.18rem; font-weight:600; }
+.total-amount{ font-weight:800; font-size:2.18rem; color:var(--accent-2); }
 
 /* Buttons */
-.btn{ cursor:pointer; border-radius:10px; padding:10px 14px; border:none; font-weight:700; }
+.btn{ cursor:pointer; border-radius:10px; padding:10px 14px; border:1px solid black; font-weight:700; }
 .btn-primary{
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
   color: #fff;
@@ -226,8 +228,8 @@ legend{ font-weight:700; margin-bottom:12px; color:#0b1720; padding-left: 12px; 
 
 /* Secondary */
 .btn-ghost{
-  background:transparent;
-  border:1px solid rgba(6,182,212,0.12);
+  background: white;
+  border:1px solid rgb(17, 18, 18);
   color:#052025;
   width:100%;
 }
