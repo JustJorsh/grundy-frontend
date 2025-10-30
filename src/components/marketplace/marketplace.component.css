@@ -150,7 +150,7 @@
 .btn-add {
   background: linear-gradient(90deg,var(--accent),var(--accent-2));
   color: rgb(21, 20, 20);
-  /* make add button fill space for better visibility */
+  
   flex: 1 1 auto;
   border: 1px solid rgb(9, 64, 19);
 }
