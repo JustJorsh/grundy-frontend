@@ -54,6 +54,29 @@
       <div class="form-group">
         <textarea [(ngModel)]="merchant.address" placeholder="Business Address" required></textarea>
       </div>
+      <div class="form-group" *ngIf="merchant.bankDetails">
+      
+
+  <select
+  id="bankSelect"
+  class="form-control"
+  [disabled]="loading"
+  [(ngModel)]="merchant.bankDetails.bankName"
+  name="bankName"
+>
+  <option value="">-- Select a Bank --</option>
+  <option *ngFor="let bank of banks" [value]="bank.code">
+    {{ bank.name }}
+  </option>
+</select>
+
+  
+      <div class="form-group" *ngIf="merchant.bankDetails">
+        <input [(ngModel)]="merchant.bankDetails.accountNumber" placeholder="Account Number" required>
+      </div>
+      <div class="form-group" *ngIf="merchant.bankDetails">
+        <input [(ngModel)]="merchant.bankDetails.accountName" placeholder="Account Name" required>
+      </div>
       <div class="form-group">
         <select [(ngModel)]="merchant.type">
            <option value="" disabled selected>Select Category</option>

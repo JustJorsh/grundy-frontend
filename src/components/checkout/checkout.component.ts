@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { OrderService } from '../../services/order.service';
-import { UtilsService } from '../../services/utils.service'; // Add this
+import { UtilsService } from '../../services/utils.service';
+import { SnackbarService } from 'src/app/snackbar.service'; // Add this
 
 @Component({
   selector: 'app-checkout',
@@ -33,7 +34,8 @@ export class CheckoutComponent implements OnInit {
     private orderService: OrderService,
     private apiService: ApiService,
     private router: Router,
-    private utils: UtilsService // Add this
+    private utils: UtilsService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -58,12 +60,13 @@ export class CheckoutComponent implements OnInit {
 
   placeOrder(): void {
     if (!this.customer.email || !this.customer.phone || !this.customer.address) {
-      alert('Please fill in all customer details');
+      this.snackbarService.error('Please fill in all customer details');
+      
       return;
     }
 
     if (!this.selectedPaymentMethod) {
-      alert('Please select a payment method');
+      this.snackbarService.error('Please select a payment method');
       return;
     }
 
@@ -87,22 +90,22 @@ export class CheckoutComponent implements OnInit {
             // Redirect to Paystack
             window.location.href = response.paymentData.authorization_url;
           } else if (this.selectedPaymentMethod === 'bank_transfer_delivery') {
-            this.virtualAccount = response.paymentData;
-            alert('Virtual account created! Check the details for payment.');
+             window.location.href = response.paymentData.authorization_url;
           } else if (this.selectedPaymentMethod === 'terminal_delivery') {
-            alert('Order created! Pay with terminal when rider arrives.');
+            this.snackbarService.success('Order created! Pay with terminal when rider arrives.');
           }
           
           this.orderService.clearCart();
           this.router.navigate(['/track-order'], { queryParams: { orderId: this.order.orderId } });
           
         } else {
-          alert('Order failed: ' + response.error);
+              
+          this.snackbarService.error('Order failed: ' + response.error);
         }
       },
       error: (error) => {
         this.isProcessing = false;
-        alert('Order failed: ' + error.error.error);
+        this.snackbarService.error('Order failed: ' + error.error.error);
       }
     });
   }

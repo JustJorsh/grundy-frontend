@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { UtilsService } from '../../services/utils.service'; // Add this
+import { UtilsService } from '../../services/utils.service';
+import { SnackbarService } from 'src/app/snackbar.service';
 
 @Component({
   selector: 'app-rider-dashboard',
@@ -21,7 +22,8 @@ export class RiderDashboardComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private utils: UtilsService // Add this
+    private utils: UtilsService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -77,29 +79,29 @@ export class RiderDashboardComponent implements OnInit {
     this.apiService.acceptOrder(orderId).subscribe({
       next: (response) => {
         if (response.success) {
-          alert('Order accepted successfully!');
+          this.snackbarService.success('Order accepted successfully!');
           this.currentOrder = response.order;
           this.loadAvailableOrders();
         } else {
-          alert('Failed to accept order: ' + response.error);
+          this.snackbarService.error('Failed to accept order: ' + response.error);
         }
       },
       error: (error) => {
-        alert('Error accepting order: ' + error.error.error);
+        this.snackbarService.error('Error accepting order: ' + error.error.error);
       }
     });
   }
 
   updateOrderStatus(status: string): void {
     if (!this.currentOrder) {
-      alert('No current order');
+      this.snackbarService.error('No current order');
       return;
     }
 
     this.apiService.updateOrderStatus(this.currentOrder.orderId, status).subscribe({
       next: (response) => {
         if (response.success) {
-          alert('Order status updated to: ' + status);
+          this.snackbarService.success('Order status updated to ' + status);
           this.currentOrder = response.order;
           
           if (status === 'delivered') {
@@ -107,11 +109,12 @@ export class RiderDashboardComponent implements OnInit {
             this.loadRiderStats();
           }
         } else {
-          alert('Failed to update order status: ' + response.error);
+         
+          this.snackbarService.error('Failed to update order status: ' + response.error);
         }
       },
       error: (error) => {
-        alert('Error updating order status: ' + error.error.error);
+        this.snackbarService.error('Error updating order status: ' + error.error.error);
       }
     });
   }
@@ -120,13 +123,13 @@ export class RiderDashboardComponent implements OnInit {
     this.apiService.processTerminalPayment(sessionId).subscribe({
       next: (response) => {
         if (response.success) {
-          alert('Terminal payment successful!');
+          this.snackbarService.success('Terminal payment successful!');
         } else {
-          alert('Terminal payment failed: ' + response.error);
+          this.snackbarService.error('Terminal payment failed: ' + response.error);
         }
       },
       error: (error) => {
-        alert('Payment error: ' + error.error.error);
+        this.snackbarService.error('Payment error: ' + error.error.error);
       }
     });
   }

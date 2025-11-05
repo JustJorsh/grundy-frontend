@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -14,6 +14,9 @@ import { OrderTrackingComponent } from '../components/order-tracking/order-track
 import { MerchantDashboardComponent } from '../components/merchant-dashboard/merchant-dashboard.component';
 import { RiderDashboardComponent } from '../components/rider-dashboard/rider-dashboard.component';
 import { ProductDetailComponent } from '../components/product-detail/product-detail.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from "@angular/material/card";
 
 const routes: Routes = [
   { path: '', component: MarketplaceComponent },
@@ -39,12 +42,15 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     FormsModule,
     CommonModule, // Add this line
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatCardModule
   ],
- providers: [
+  providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    MatSnackBar
   ],
   bootstrap: [AppComponent]
 })

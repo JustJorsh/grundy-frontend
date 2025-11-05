@@ -3,6 +3,7 @@ import { Product, ApiService } from '../../services/api.service';
 import { OrderService, CartItem } from '../../services/order.service';
 import { Router } from '@angular/router';
 import { UtilsService } from '../../services/utils.service'; // Add this import
+import { SnackbarService } from 'src/app/snackbar.service';
 
 @Component({
   selector: 'app-marketplace',
@@ -20,7 +21,9 @@ export class MarketplaceComponent implements OnInit {
     private api: ApiService,
     private orderService: OrderService,
     private router: Router,
-    private utils: UtilsService // Add this
+    private utils: UtilsService, // Add this
+    private snackbarService: SnackbarService
+
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +40,7 @@ export class MarketplaceComponent implements OnInit {
           this.products = res;
         } else if (res && Array.isArray(res.products)) {
           this.products = res.products;
+          console.log('Products loaded:', this.products);
         } else {
           this.products = [];
         }
@@ -55,7 +59,8 @@ export class MarketplaceComponent implements OnInit {
     const payload: any = { ...product, productId: product._id };
     this.orderService.addToCart(payload);
     this.cart = this.orderService.getCart();
-    alert(`Added ${product.name} to cart!`);
+    this.snackbarService.success(`Added ${product.name} to cart!`);
+
   }
 
   removeFromCart(productId: string): void {
@@ -81,7 +86,8 @@ export class MarketplaceComponent implements OnInit {
 
   proceedToCheckout(): void {
     if (this.cart.length === 0) {
-      alert('Your cart is empty!');
+     
+      this.snackbarService.error('Your cart is empty!');
       return;
     }
     this.router.navigate(['/checkout']);

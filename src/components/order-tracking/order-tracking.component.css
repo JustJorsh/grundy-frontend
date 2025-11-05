@@ -52,6 +52,8 @@
   padding: 1.5rem;
   background: #f8f9fa;
   border-radius: 8px;
+  width: 30%;
+  margin: 10px;
 }
 
 .info-section h4 {
@@ -64,6 +66,13 @@
 }
 
 .order-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.order-grid {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;

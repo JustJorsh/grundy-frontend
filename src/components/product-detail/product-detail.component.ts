@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, Product } from '../../services/api.service';
 import { OrderService } from '../../services/order.service';
 import { UtilsService } from '../../services/utils.service';
+import { SnackbarService } from 'src/app/snackbar.service';
+
 
 @Component({
   selector: 'app-product-detail',
@@ -19,7 +21,9 @@ export class ProductDetailComponent implements OnInit {
     private api: ApiService,
     private orderService: OrderService,
     private utils: UtilsService,
-    private router: Router
+    private router: Router,
+        private snackbarService: SnackbarService
+
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +55,7 @@ export class ProductDetailComponent implements OnInit {
   addToCart(): void {
     if (!this.product) return;
     this.orderService.addToCart(this.product, 1);
-    alert(`Added ${this.product.name} to cart.`);
+    this.snackbarService.success(`Added ${this.product.name} to cart!`);
   }
 
   formatCurrency(amount: number): string {

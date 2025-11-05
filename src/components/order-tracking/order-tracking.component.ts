@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { UtilsService } from '../../services/utils.service';
+import { SnackbarService } from 'src/app/snackbar.service';
+
 
 interface Order {
   orderId: string;
@@ -51,7 +53,8 @@ export class OrderTrackingComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private utils: UtilsService
+    private utils: UtilsService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +72,7 @@ export class OrderTrackingComponent implements OnInit {
 
   trackOrder(): void {
     if (!this.trackOrderId) {
-      alert('Please enter an order ID');
+      this.snackbarService.error('Please enter an order ID');
       return;
     }
 
@@ -80,13 +83,13 @@ export class OrderTrackingComponent implements OnInit {
         if (response.success) {
           this.trackedOrder = response.order;
         } else {
-          alert('Order not found');
+          this.snackbarService.error('Order not found');
           this.trackedOrder = null;
         }
       },
       error: (error) => {
         this.isLoading = false;
-        alert('Error tracking order: ' + error.error.error);
+        this.snackbarService.error('Error tracking order: ' + error.error.error);
         this.trackedOrder = null;
       }
     });

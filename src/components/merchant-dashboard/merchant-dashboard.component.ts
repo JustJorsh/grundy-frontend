@@ -9,6 +9,11 @@ interface Merchant {
   phone?: string;
   address?: string;
   type?: string;
+  bankDetails?: {
+    bankName: string;
+    accountNumber: string;
+    accountName: string;
+  };
 }
 
 interface Customer {
@@ -52,7 +57,14 @@ export class MerchantDashboardComponent {
     businessName: '',
     phone: '',
     address: '',
-    type: ''
+    type: '',
+    bankDetails: {
+      bankName: '',
+      accountNumber: '',
+      accountName: ''
+    }
+
+
   };
 
   newProduct: Product = {
@@ -61,6 +73,10 @@ export class MerchantDashboardComponent {
     stock: 0,
     category: ''
   };
+
+   banks: any[] = [];
+  selectedBankCode: string = '';
+  loading = true;
 
   orders: Order[] = [];
   analytics: Analytics = {
@@ -101,6 +117,24 @@ export class MerchantDashboardComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.api.getBanks().subscribe({
+      next: (res: any) => {
+        this.banks = res.data; // Paystack returns { status, message, data: [...] }
+        this.loading = false;
+      },
+      error: () => {
+        console.error('Error fetching banks:', this.errorMessage);
+        this.loading = false;
+      }
+    });
+  }
+
+  onBankSelect(event: any): void {
+    this.selectedBankCode = event.target.value;
+    console.log('Selected Bank Code:', this.selectedBankCode);
+  }
+
   registerMerchant(): void {
     this.errorMessage = null;
 
@@ -110,7 +144,8 @@ export class MerchantDashboardComponent {
       phone: this.merchant.phone || '',
       address: this.merchant.address || '',
       type: this.merchant.type || '',
-      password: this.merchant.password || ''
+      password: this.merchant.password || '',
+      bankDetails: this.merchant.bankDetails || { bankName: '', accountNumber: '', accountName: '' }
     };
 
     this.api.registerMerchant(payload).subscribe({

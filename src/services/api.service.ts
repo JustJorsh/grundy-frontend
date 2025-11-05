@@ -54,8 +54,8 @@ export interface Merchant {
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://grundy-backend.onrender.com/api';
-  // private baseUrl = 'http://localhost:5200/api';
+  // private baseUrl = 'https://grundy-backend.onrender.com/api';
+  private baseUrl = 'http://localhost:5200/api';
 
 
   constructor(private http: HttpClient) { }
@@ -73,7 +73,10 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/orders?email=${email}`);
   }
 
-  
+   getBanks(): Observable<any> {
+    // Optionally: add ?country=nigeria or ?type=mobile_money
+    return this.http.get('https://api.paystack.co/bank');
+  }
 
   // Payment APIs
   verifyPayment(reference: string): Observable<any> {
