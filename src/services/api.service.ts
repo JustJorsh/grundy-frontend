@@ -54,8 +54,8 @@ export interface Merchant {
   providedIn: 'root'
 })
 export class ApiService {
-  // private baseUrl = 'https://grundy-backend.onrender.com/api';
-  private baseUrl = 'http://localhost:5200/api';
+  private baseUrl = 'https://grundy-backend.onrender.com/api';
+  // private baseUrl = 'http://localhost:5200/api';
 
 
   constructor(private http: HttpClient) { }
